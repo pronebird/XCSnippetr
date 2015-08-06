@@ -427,7 +427,7 @@ static NSString * const kSystemSoundSuccess =   @"Glass";
             
             NSImage *icon = [SLKBundle() imageForResource:@"pasteboard_copy"];
             
-            [XCSBezelAlert showWithIcon:icon message:@"Link copied!" parentWindow:nil duration:0.5];
+            [XCSBezelAlert showWithIcon:icon message:@"Link copied!" parentWindow:nil duration:1.0];
         }
         
         [self dismiss:nil returnCode:NSModalResponseOK];

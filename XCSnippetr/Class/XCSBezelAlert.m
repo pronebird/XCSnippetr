@@ -24,7 +24,7 @@
         parentWindow = [[[NSApplication sharedApplication] windows] objectAtIndex:0];
     }
     
-    NSPanel *alertPanel = [[alertClass alloc] initWithIcon:icon message:message parentWindow:parentWindow duration:10];
+    NSPanel *alertPanel = [[alertClass alloc] initWithIcon:icon message:message parentWindow:parentWindow duration:duration];
     
     [alertPanel orderFront:nil];
 }

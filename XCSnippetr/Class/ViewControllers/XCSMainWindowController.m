@@ -420,10 +420,10 @@ static NSString * const kSystemSoundSuccess =   @"Glass";
     if (!error) {
         [[NSSound soundNamed:kSystemSoundSuccess] play];
         
-        if (self.snippet.url) {
+        if (self.snippet.URL) {
             NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
             [pasteboard clearContents];
-            [pasteboard writeObjects:@[ self.snippet.url ]];
+            [pasteboard writeObjects:@[self.snippet.URL]];
             
             NSImage *icon = [SLKBundle() imageForResource:@"pasteboard_copy"];
             
@@ -434,6 +434,7 @@ static NSString * const kSystemSoundSuccess =   @"Glass";
     }
     else {
         [[NSSound soundNamed:kSystemSoundFailure] play];
+        
         [self handleError:error];
     }
 }

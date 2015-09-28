@@ -161,6 +161,9 @@ NSString *activeDocumentName()
         // Creates the Xcode Menu Item
         NSMenuItem *xcodeItem = [submenu itemWithTitle:kTitleSaveXcode];
         
+        // Creates the Synchronize Snippets Menu Item
+        NSMenuItem *syncItem = [submenu itemWithTitle:kTitleSynconrizeSnippets];
+        
         // Configure Slack Item
         if (!slackItem) {
             slackItem = [[NSMenuItem alloc] initWithTitle:kTitleShareSlack action:@selector(shareCodeSnippet:) keyEquivalent:@""];
@@ -191,13 +194,25 @@ NSString *activeDocumentName()
             xcodeItem.tag = XCSServiceUndefined;
             xcodeItem.target = target;
             
-            NSMenuItem *separator = [NSMenuItem separatorItem];
-            
             [submenu insertItem:xcodeItem atIndex:idx+2];
-            [submenu insertItem:separator atIndex:idx+3];
         }
         else {
             xcodeItem.target = target;
+        }
+        
+        // Configure Synchronize Item
+        if (!syncItem) {
+            syncItem = [[NSMenuItem alloc] initWithTitle:kTitleSaveXcode action:@selector(synchronizeXcodeSnippets:) keyEquivalent:@""];
+            syncItem.tag = XCSServiceUndefined;
+            syncItem.target = target;
+            
+            NSMenuItem *separator = [NSMenuItem separatorItem];
+            
+            [submenu insertItem:syncItem atIndex:idx+3];
+            [submenu insertItem:separator atIndex:idx+4];
+        }
+        else {
+            syncItem.target = target;
         }
         
     }
@@ -300,6 +315,11 @@ NSString *activeDocumentName()
     }];
 }
 
+- (void)synchronizeXcodeSnippets:(NSMenuItem *)menuItem {
+    [[XCSSnippetRepository defaultRepository] synchronize:^(BOOL success, NSError *error) {
+        NSLog(@"Synchronize: success = %d, error = %@", success, error);
+    }];
+}
 
 #pragma mark - Lifeterm
 

@@ -81,8 +81,8 @@ static dispatch_queue_t dispatchQueue;
             strongSelf.outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
             strongSelf.errorString = [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding];
             
-            NSLog(@"stdout: %@", self.outputString);
-            NSLog(@"stderr: %@", self.errorString);
+            NSLog(@"stdout: %@", strongSelf.outputString);
+            NSLog(@"stderr: %@", strongSelf.errorString);
             NSLog(@"terminationStatus = %d", task.terminationStatus);
             
             [strongSelf completeOperation];

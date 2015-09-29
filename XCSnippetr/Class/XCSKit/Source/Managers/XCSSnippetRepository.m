@@ -7,6 +7,7 @@
 //
 
 #import "XCSSnippetRepository.h"
+#import "XCSGitRepository.h"
 
 static NSString const *XCSSnippetLanguageDomain = @"Xcode.SourceCodeLanguage";
 static NSString const *XCSSnippetTemplateName = @"XCSSnippetTemplate";
@@ -29,46 +30,7 @@ static NSString const *XCSSnippetTemplateName = @"XCSSnippetTemplate";
 {
     NSString *libraryDirectory = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
     
-    return [libraryDirectory stringByAppendingString:@"Developer/Xcode/UserData/CodeSnippets"];
-}
-
-- (void)_runShellCommand:(NSString *)commandLine completion:(void(^)(NSData *outData, NSData *errData))completion {
-    NSPipe *stdOutputPipe = [[NSPipe alloc] init];
-    NSPipe *stdErrorPipe = [[NSPipe alloc] init];
-    NSTask *task = [[NSTask alloc] init];
-    
-    task.currentDirectoryPath = [self snippetsDirectory];
-    task.launchPath = @"/bin/sh";
-    task.arguments = @[ @"-c", [NSString stringWithFormat:@"\"%@\"", commandLine] ];
-    task.standardOutput = stdOutputPipe;
-    task.standardError = stdErrorPipe;
-    
-    NSMutableData *outputData = [[NSMutableData alloc] init];
-    NSMutableData *errorData = [[NSMutableData alloc] init];
-    
-    stdOutputPipe.fileHandleForReading.readabilityHandler = ^(NSFileHandle *handle) {
-        NSData *data = [handle availableData];
-        if(data) {
-            [outputData appendData:data];
-        }
-    };
-    
-    stdErrorPipe.fileHandleForReading.readabilityHandler = ^(NSFileHandle *handle) {
-        NSData *data = [handle availableData];
-        if(data) {
-            [errorData appendData:data];
-        }
-    };
-    
-    task.terminationHandler = ^(NSTask *task) {
-        if(completion) {
-            completion(outputData, errorData);
-        }
-    };
-    
-    [task launch];
-    
-    [stdOutputPipe.fileHandleForReading readToEndOfFileInBackgroundAndNotify];
+    return [libraryDirectory stringByAppendingPathComponent:@"Developer/Xcode/UserData/CodeSnippets"];
 }
 
 - (void)saveSnippet:(XCSSnippet *)snippet completion:(void (^)(NSString *filePath, NSError *error))completion
@@ -100,27 +62,50 @@ static NSString const *XCSSnippetTemplateName = @"XCSSnippetTemplate";
 
 - (void)synchronize:(void(^)(BOOL success, NSError *error))completion
 {
-    NSString *snippetsDirectory = [self snippetsDirectory];
-    NSString *gitDirectory = [snippetsDirectory stringByAppendingPathComponent:@".git"];
+    XCSGitRepository *repo = [[XCSGitRepository alloc] initWithRepositoryAtPath:[self snippetsDirectory]];
     
-    if(![[NSFileManager defaultManager] fileExistsAtPath:gitDirectory]) {
-        [self _setupGitRepository];
+    if([repo exists]) {
+        // stage all/commit/pull+merge/push
+        
+        XCSGitOperation *stageOperation = [repo stageAll];
+        XCSGitOperation *commitOperation = [repo commitWithMessage:@"Update snippets"];
+        [commitOperation addDependency:stageOperation];
+        
+        XCSGitOperation *pullOperation = [repo pull];
+        [pullOperation addDependency:commitOperation];
+        
+        XCSGitOperation *pushOperation = [repo push];
+        pushOperation.completionBlock = ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(completion) {
+                    completion(YES, nil);
+                }
+            });
+        };
+        [pushOperation addDependency:pullOperation];
+        
+        [repo scheduleOperations:@[ stageOperation, commitOperation, pullOperation, pushOperation ]];
     }
     else {
+        // init/stage all/commit/push?
         
+        XCSGitOperation *createOperation = [repo create];
+        
+        XCSGitOperation *stageOperation = [repo stageAll];
+        [stageOperation addDependency:createOperation];
+        
+        XCSGitOperation *commitOperation = [repo commitWithMessage:@"Initial import"];
+        commitOperation.completionBlock = ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(completion) {
+                    completion(YES, nil);
+                }
+            });
+        };
+        [commitOperation addDependency:stageOperation];
+        
+        [repo scheduleOperations:@[ createOperation, stageOperation, commitOperation ]];
     }
-}
-
-- (void)_setupGitRepository {
-    NSString *command = @"git init";
-    
-    [self _runShellCommand:command completion:^(NSData *outData, NSData *errData) {
-        NSString *outString = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
-        NSString *errString = [[NSString alloc] initWithData:errData encoding:NSUTF8StringEncoding];
-        
-        NSLog(@"outString = %@", outString);
-        NSLog(@"errString = %@", errString);
-    }];
 }
 
 @end

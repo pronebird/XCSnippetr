@@ -9,6 +9,7 @@
 
 #import "AppDelegate.h"
 #import "XCSMainWindowController.h"
+#import "XCSSnippetRepository.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) XCSMainWindowController *mainWindowController;
@@ -27,6 +28,12 @@
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
     return YES;
+}
+
+- (IBAction)synchronizeSnippets:(id)sender {
+    [[XCSSnippetRepository defaultRepository] synchronize:^(BOOL success, NSError *error) {
+        
+    }];
 }
 
 @end

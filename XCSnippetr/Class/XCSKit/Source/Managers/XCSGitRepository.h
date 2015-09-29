@@ -27,4 +27,6 @@
 - (XCSGitOperation *)push;
 - (XCSGitOperation *)pull;
 
+- (XCSGitOperation *)addRemote:(NSString *)name withURL:(NSString *)url;
+
 @end

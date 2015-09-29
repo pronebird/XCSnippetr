@@ -84,4 +84,14 @@ static dispatch_queue_t dispatchQueue;
     return operation;
 }
 
+- (XCSGitOperation *)addRemote:(NSString *)name withURL:(NSString *)url {
+    NSParameterAssert(name);
+    NSParameterAssert(url);
+    
+    NSArray<NSString *> *arguments = @[ @"remote", @"add", name, url ];
+    XCSGitOperation *operation = [[XCSGitOperation alloc] initWithLaunchPath:kGitBinaryPath currentDirectoryPath:self.path arguments:arguments];
+    
+    return operation;
+}
+
 @end

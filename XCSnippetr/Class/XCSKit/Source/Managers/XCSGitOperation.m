@@ -76,16 +76,7 @@ static dispatch_queue_t dispatchQueue;
     
     task.terminationHandler = ^(NSTask *task) {
         dispatch_async(dispatchQueue, ^{
-            __strong __typeof(self) strongSelf = weakSelf;
-            
-            strongSelf.outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-            strongSelf.errorString = [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding];
-            
-            NSLog(@"stdout: %@", strongSelf.outputString);
-            NSLog(@"stderr: %@", strongSelf.errorString);
-            NSLog(@"terminationStatus = %d", task.terminationStatus);
-            
-            [strongSelf completeOperation];
+            [weakSelf _completeOperationWithTask:task outputData:outputData errorData:errorData];
         });
     };
     
@@ -94,6 +85,21 @@ static dispatch_queue_t dispatchQueue;
     self.task = task;
     
     [task launch];
+}
+
+- (void)_completeOperationWithTask:(NSTask *)task outputData:(NSData *)outputData errorData:(NSData *)errorData {
+    self.outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+    self.errorString = [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding];
+    
+    if(task.terminationStatus != 0) {
+        [self failWithExitCode:task.terminationStatus];
+    }
+    
+    NSLog(@"stdout: %@", self.outputString);
+    NSLog(@"stderr: %@", self.errorString);
+    NSLog(@"terminationStatus = %d", task.terminationStatus);
+    
+    [self completeOperation];
 }
 
 - (void)_resetTask {

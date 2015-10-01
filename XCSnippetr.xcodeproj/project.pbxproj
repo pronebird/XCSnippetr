@@ -16,6 +16,8 @@
 		4FA17E0D1AF552390049D26F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F562CBD1AED95AB00A865CB /* Cocoa.framework */; };
 		4FA17E0E1AF5523E0049D26F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD9186519A7B46F00B814F8 /* AppKit.framework */; };
 		4FA17E0F1AF552430049D26F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD9186719A7B46F00B814F8 /* Foundation.framework */; };
+		583A09C11BBD468C00497CA1 /* XCSGitCommitOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 583A09C01BBD468C00497CA1 /* XCSGitCommitOperation.m */; settings = {ASSET_TAGS = (); }; };
+		583A09C21BBD472200497CA1 /* XCSGitCommitOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 583A09C01BBD468C00497CA1 /* XCSGitCommitOperation.m */; settings = {ASSET_TAGS = (); }; };
 		5881923C1BBA7222005DE4DD /* XCSGitRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 5881923B1BBA7222005DE4DD /* XCSGitRepository.m */; settings = {ASSET_TAGS = (); }; };
 		5881923D1BBA7508005DE4DD /* XCSGitRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 5881923B1BBA7222005DE4DD /* XCSGitRepository.m */; settings = {ASSET_TAGS = (); }; };
 		5881923E1BBA750A005DE4DD /* XCSSnippetRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = F59627C31BB7277100D23253 /* XCSSnippetRepository.m */; settings = {ASSET_TAGS = (); }; };
@@ -770,6 +772,8 @@
 		4FA17DE01AF494FB0049D26F /* XCSnippetrApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XCSnippetrApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FA17DE41AF494FB0049D26F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4FA17DE51AF494FB0049D26F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		583A09BF1BBD468C00497CA1 /* XCSGitCommitOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCSGitCommitOperation.h; path = Managers/XCSGitCommitOperation.h; sourceTree = "<group>"; };
+		583A09C01BBD468C00497CA1 /* XCSGitCommitOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCSGitCommitOperation.m; path = Managers/XCSGitCommitOperation.m; sourceTree = "<group>"; };
 		5881923A1BBA7222005DE4DD /* XCSGitRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCSGitRepository.h; path = Managers/XCSGitRepository.h; sourceTree = "<group>"; };
 		5881923B1BBA7222005DE4DD /* XCSGitRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCSGitRepository.m; path = Managers/XCSGitRepository.m; sourceTree = "<group>"; };
 		588192401BBA835A005DE4DD /* XCSGitBaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCSGitBaseOperation.h; path = Managers/XCSGitBaseOperation.h; sourceTree = "<group>"; };
@@ -1480,6 +1484,8 @@
 				F59627C51BB728C100D23253 /* XCSSnippetTemplate.plist */,
 				5881923A1BBA7222005DE4DD /* XCSGitRepository.h */,
 				5881923B1BBA7222005DE4DD /* XCSGitRepository.m */,
+				583A09BF1BBD468C00497CA1 /* XCSGitCommitOperation.h */,
+				583A09C01BBD468C00497CA1 /* XCSGitCommitOperation.m */,
 				588192431BBA84A3005DE4DD /* XCSGitOperation.h */,
 				588192441BBA84A3005DE4DD /* XCSGitOperation.m */,
 				588192401BBA835A005DE4DD /* XCSGitBaseOperation.h */,
@@ -2682,6 +2688,7 @@
 				588192461BBA8B6C005DE4DD /* XCSGitOperation.m in Sources */,
 				F503CE501BAC732F000149D8 /* XCSBezelAlert.m in Sources */,
 				F56B5B461BADBA2300D37EB8 /* SSKeychainQuery.m in Sources */,
+				583A09C21BBD472200497CA1 /* XCSGitCommitOperation.m in Sources */,
 				F503CE4C1BAC732F000149D8 /* XCSLoginViewController.m in Sources */,
 				588192471BBA8B72005DE4DD /* XCSGitBaseOperation.m in Sources */,
 				F5D7BCD51BACE13500D7A535 /* ACEThemeNames.m in Sources */,
@@ -2723,6 +2730,7 @@
 				588192421BBA835A005DE4DD /* XCSGitBaseOperation.m in Sources */,
 				F56B5B451BADBA2300D37EB8 /* SSKeychainQuery.m in Sources */,
 				F503CE5D1BAC7523000149D8 /* DTXcodeUtils.m in Sources */,
+				583A09C11BBD468C00497CA1 /* XCSGitCommitOperation.m in Sources */,
 				F5D7BCD41BACE13500D7A535 /* ACEThemeNames.m in Sources */,
 				F56B5B3B1BADBA2300D37EB8 /* XCSBaseClient.m in Sources */,
 				F56B5B3D1BADBA2300D37EB8 /* XCSAccount.m in Sources */,

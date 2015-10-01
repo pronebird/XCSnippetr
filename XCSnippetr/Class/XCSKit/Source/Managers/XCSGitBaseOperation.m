@@ -12,6 +12,7 @@
 
 @property (nonatomic, getter = isFinished, readwrite)  BOOL finished;
 @property (nonatomic, getter = isExecuting, readwrite) BOOL executing;
+@property (nonatomic, getter = isFailed, readwrite) BOOL failed;
 
 @end
 
@@ -19,6 +20,7 @@
 
 @synthesize finished  = _finished;
 @synthesize executing = _executing;
+@synthesize failed = _failed;
 
 - (id)init {
     self = [super init];
@@ -30,7 +32,15 @@
 }
 
 - (void)start {
-    if ([self isCancelled]) {
+    // cancel operation if any of dependent operations failed.
+    for(NSOperation *operation in self.dependencies) {
+        if(([operation isKindOfClass:[self class]] && [((__typeof(self))operation) isFailed]) || [operation isCancelled]) {
+            self.failed = YES;
+            [self cancel];
+        }
+    }
+    
+    if([self isCancelled]) {
         self.finished = YES;
         return;
     }
@@ -38,6 +48,12 @@
     self.executing = YES;
     
     [self main];
+}
+
+- (void)failWithExitCode:(int)exitCode {
+    if(exitCode != 0) {
+        self.failed = YES;
+    }
 }
 
 - (void)completeOperation {
@@ -67,6 +83,12 @@
     }
 }
 
+- (BOOL)isFailed {
+    @synchronized(self) {
+        return _failed;
+    }
+}
+
 - (void)setExecuting:(BOOL)executing {
     @synchronized(self) {
         NSString *key = NSStringFromSelector(@selector(isExecuting));
@@ -86,6 +108,18 @@
         if (_finished != finished) {
             [self willChangeValueForKey:key];
             _finished = finished;
+            [self didChangeValueForKey:key];
+        }
+    }
+}
+
+- (void)setFailed:(BOOL)failed {
+    @synchronized(self) {
+        NSString *key = NSStringFromSelector(@selector(isFailed));
+        
+        if (_failed != failed) {
+            [self willChangeValueForKey:key];
+            _failed = failed;
             [self didChangeValueForKey:key];
         }
     }

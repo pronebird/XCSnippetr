@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "XCSGitOperation.h"
+#import "XCSGitCommitOperation.h"
 
 @interface XCSGitRepository : NSObject
 
@@ -22,7 +23,7 @@
 
 - (XCSGitOperation *)create;
 - (XCSGitOperation *)stageAll;
-- (XCSGitOperation *)commitWithMessage:(NSString *)message;
+- (XCSGitCommitOperation *)commitWithMessage:(NSString *)message;
 
 - (XCSGitOperation *)push;
 - (XCSGitOperation *)pull;

@@ -61,11 +61,11 @@ static dispatch_queue_t dispatchQueue;
     return operation;
 }
 
-- (XCSGitOperation *)commitWithMessage:(NSString *)message {
+- (XCSGitCommitOperation *)commitWithMessage:(NSString *)message {
     NSParameterAssert(message);
     
     NSArray<NSString *> *arguments = @[ @"commit", @"-m", message ];
-    XCSGitOperation *operation = [[XCSGitOperation alloc] initWithLaunchPath:kGitBinaryPath currentDirectoryPath:self.path arguments:arguments];
+    XCSGitCommitOperation *operation = [[XCSGitCommitOperation alloc] initWithLaunchPath:kGitBinaryPath currentDirectoryPath:self.path arguments:arguments];
     
     return operation;
 }

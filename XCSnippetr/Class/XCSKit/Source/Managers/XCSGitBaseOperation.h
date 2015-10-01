@@ -10,6 +10,9 @@
 
 @interface XCSGitBaseOperation : NSOperation
 
+@property (nonatomic, getter = isFailed, readonly) BOOL failed;
+
+- (void)failWithExitCode:(int)exitCode;
 - (void)completeOperation;
 
 @end
